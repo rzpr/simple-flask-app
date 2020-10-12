@@ -8,6 +8,25 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     return "ONLINE"
+ 
+@app.route('/postjson', methods = ['POST'])
+def postJsonHandler():
+    print (request.is_json)
+    content = request.get_json()
+    req = r.get(content['url'])
+    sd = re.search('sd_src:"(.+?)"', req.text).group(1)
+    hd = re.search('hd_src:"(.+?)"', req.text).group(1)
+    js = {
+    "results":{
+    "link-downloads":{
+        "sd-quality":sd,
+        "hd-quality":hd
+     }
+     }
+     }
+    return js
+  
+
 @app.route('/bot', methods=['GET'])
 def fb():
     url = request.args.get('url')
