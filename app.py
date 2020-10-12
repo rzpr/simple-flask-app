@@ -8,8 +8,7 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     return "ONLINE"
-
-@app.route('/fb')
+@app.route('/bot', methods=['GET'])
 def fb():
     url = request.args.get('url')
     req = r.get(url)
