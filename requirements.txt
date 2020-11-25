@@ -4,4 +4,3 @@ gunicorn==20.0.4
 googletrans
 google
 bs4
-base64
