@@ -1,37 +1,26 @@
-from flask import Flask
-import requests as r, re
-from flask import request
+from flask import Flask, request
+import requests
+from bs4 import BeautifulSoup as bs
 import json, base64
-from bs4 import BeautifulSoup
 
 app = Flask(__name__)
- 
+
 @app.route('/')
 def home():
-    return "ONLINE"
+    a = {
+    'Contoh-Penggunaan':{'lirik': 'sdsd', 'facebook-downloader':'sadsd', 'nulis-bot':'sdsdsd', 'instagram-downloader': 's'}
+    }
+    return a
 
 @app.route('/bot', methods=['GET'])
 def fb():
     url = request.args.get('url')
-    req = r.get(url)
+    req = requests.get(url)
     sd = re.search('sd_src:"(.+?)"', req.text).group(1)
     hd = re.search('hd_src:"(.+?)"', req.text).group(1)
     js = {
     "results-hd": hd,
     "results-sd": sd
-    }
-    return js
-
-@app.route('/lirik', methods=['GET'])
-def lirik():
-    artis = request.args.get('artis')
-    judul = request.args.get('judul')
-    print('https://lirik.id/lyric/'+artis+'-'+judul)
-    req = r.get('https://lirik.id/lyric/'+judul+'-'+artis)
-    soup = BeautifulSoup(req.text, 'html.parser')
-    car = soup.find('div', class_='entry-content')
-    js = {
-    "results":car.text
     }
     return js
 
@@ -55,7 +44,7 @@ def tulis():
         headers = {
          'Accept': 'application/json'
          }
-        req = r.post(url,data=par, headers=headers)
+        req = requests.post(url,data=par, headers=headers)
         p = req.json()['data']['display_url']
         js = {
          "results":p
@@ -65,15 +54,23 @@ def tulis():
 @app.route('/ig', methods=['GET'])
 def ig():
     url = request.args.get('video_id')
-    req = r.get('https://instagram.com/p/'+url+'?__a=1')
+    req = requests.get('https://instagram.com/p/'+url+'?__a=1')
     jss = req.json()['graphql']['shortcode_media']['video_url']
     js = {
     "results":jss
     }
     return js
 
-    
+@app.route('/lirik')
+def lirik():
+    par= request.args.get('search')
+    from lirik import search
+    a = search(par)
+    b = {
+    'results': a.result()
+    }
+    return b
 
 
 if __name__ == '__main__':
-  app.run()
+    app.run()
