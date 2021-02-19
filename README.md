@@ -10,7 +10,7 @@
 
 # Lirik Lagu
 ```
-https://localhost:8080/lirik?artis=oasis&judul=wonderwall
+https://localhost:8080/lirik?search=oasis wonderwall
 ```
 # Response
 ```
