@@ -63,14 +63,19 @@ def ig():
 
 @app.route('/lirik')
 def lirik():
+@app.route('/lirik')
+def lirik():
+    res = []
     par= request.args.get('search')
-    from lirik import search
-    a = search(par)
-    b = {
-    'results': a.result()
+    req = requests.get(f'https://www.google.com/search?q=lirik%20lagu%20{par}',headers={'User-Agent':'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:94.0) Gecko/20100101 Firefox/94.0'})
+    soup = bs(req.text, 'html.parser')
+    for i in soup.find_all('span',jsname='YS01Ge'):
+        res.append(i.text)
+    data = ''.join(res)
+    js = {
+    'resut': data
     }
-    return b
-
+    return json.dumps(js)
 
 if __name__ == '__main__':
     app.run()
