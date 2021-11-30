@@ -61,8 +61,7 @@ def ig():
     }
     return js
 
-@app.route('/lirik')
-def lirik():
+
 @app.route('/lirik')
 def lirik():
     res = []
